@@ -2,7 +2,7 @@
 
 ## Description
 
-### [rm_vector.h](include%2Frm_vector.h)
+### [rm_std.h](include%2Frm_std.h)
 
 - 声明和实现了`vector`类，实现vector的操作函数
 - 实现数学库中的标准函数 `std::abs`, `std::sqrt`, 和 `std::pow` 
