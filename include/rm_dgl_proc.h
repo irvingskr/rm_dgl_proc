@@ -9,6 +9,7 @@
 #if TEST
 #include <iostream>
 #include <opencv4/opencv2/opencv.hpp>
+#include <chrono>
 #endif
 #endif // RM_DGL_PROC_RM_DGL_PROC_H
 

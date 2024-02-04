@@ -3,11 +3,11 @@
 //
 
 #include <rm_dgl_proc.h>
-#define GREEN_THRESHOLD 20 // 绿色阈值（0-255，越高筛选越绿）
+#define GREEN_THRESHOLD 30 // 绿色阈值（0-255，越高筛选越绿）
 #define C_THRESHOLD 60 // 圆阈值（0-正无穷，越低筛选越圆）
 // 图像宽高（测试模式不需要）
-#define WIDTH 640
-#define HEIGHT 640
+#define WIDTH 100
+#define HEIGHT 100
 #if TEST
 #define IMAGE_PATH "/home/irving/图片/images.jpeg" // 测试图片路径
 #endif
@@ -117,10 +117,20 @@ void Processor::process() {
 
 int main() {
 #if TEST
+  // 获取开始时间点
+  auto start = std::chrono::high_resolution_clock::now();
+
   RmDglProc::Processor processor(WIDTH, HEIGHT, GREEN_THRESHOLD, C_THRESHOLD);
   processor.loadImageData(IMAGE_PATH);
   processor.process();
   processor.showFilteredResult(); // 显示过滤后的结果
+
+  // 获取结束时间点
+  auto end = std::chrono::high_resolution_clock::now();
+  // 计算运行时间(微秒)
+  auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+  // 输出运行时间
+  std::cout << "Time taken to execute: " << duration << " microseconds" << std::endl;
 #else
   RmDglProc::Processor processor(640, 640, GREEN_THRESHOLD, C_THRESHOLD);
   processor.process();

@@ -7,7 +7,7 @@
 - 声明和实现了`vector`类，实现vector的操作函数
 - 实现数学库中的标准函数 `std::abs`, `std::sqrt`, 和 `std::pow` 
 
-### [rm_dgl_proc.h](include%2Frm_dgl_proc.h)
+### [contours_detector.h](include%2Fcontours_detector.h)
 
 - 声明并实现了`ContoursDetector`类，实现`ContoursDetector`类的函数
   

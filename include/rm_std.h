@@ -69,6 +69,21 @@ public:
     return data[index];
   }
 
+  T& back() {
+      if (size == 0) {
+          throw "Cannot perform 'back' on an empty vector.";
+      }
+      return data[size - 1];
+  }
+
+  void pop_back() {
+      if (size == 0) {
+          throw "Cannot perform 'pop_back' on an empty vector.";
+      }
+      --size;
+      // 有必要的话，这里可以调用析构函数来销毁对象：data[size].~T();
+  }
+
   void clear() { size = 0; }
 
   unsigned int count() const { return size; }

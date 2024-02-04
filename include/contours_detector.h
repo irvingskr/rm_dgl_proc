@@ -89,25 +89,25 @@ public:
   /// 从边缘点递归跟踪轮廓
   void trackContour(int x, int y, unsigned char *visited,
                     Vector<Point> &contour) {
-    // 检查边界条件
-    if (x < 0 || x >= width_ || y < 0 || y >= height_) {
-      return;
-    }
 
-    // 检查是否为边缘点且未被访问
-    if (!edgeImage_[y * width_ + x] || visited[y * width_ + x]) {
-      return;
-    }
+      Vector<Point> stack;
+      stack.push_back({x, y});
 
-    // 标记当前点为已访问并添加到轮廓中
-    visited[y * width_ + x] = true;
-    contour.push_back(Point{x, y});
+      while (stack.size) {
+          Point p = stack.back();
+          stack.pop_back();
 
-    // 递归地检查周围的点（上、下、左、右）
-    trackContour(x, y - 1, visited, contour); // 上
-    trackContour(x, y + 1, visited, contour); // 下
-    trackContour(x - 1, y, visited, contour); // 左
-    trackContour(x + 1, y, visited, contour); // 右
+          if (p.x < 0 || p.x >= width_ || p.y < 0 || p.y >= height_) continue;
+          if (!edgeImage_[p.y * width_ + p.x] || visited[p.y * width_ + p.x]) continue;
+
+          visited[p.y * width_ + p.x] = true;
+          contour.push_back(Point{p.x, p.y});
+
+          stack.push_back({p.x, p.y - 1}); // 上
+          stack.push_back({p.x, p.y + 1}); // 下
+          stack.push_back({p.x - 1, p.y}); // 左
+          stack.push_back({p.x + 1, p.y}); // 右
+      }
   };
 
   /// 圆形轮廓判断
