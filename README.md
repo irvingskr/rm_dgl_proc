@@ -10,9 +10,23 @@
 ### [contours_detector.h](include%2Fcontours_detector.h)
 
 - 声明并实现了`ContoursDetector`类，实现`ContoursDetector`类的函数
-  
+
+  - 边缘和质心检测函数`detectEdges`
+
   - 轮廓提取函数`detectContours`
   - 圆提取函数`detectCircles`
+
+- 宏定义并行化模式
+
+  - 此模式下会废弃轮廓和圆提取功能，直接用质心检测作为圆心
+
+  - [rm_dgl_proc.cpp](src%2Frm_dgl_proc.cpp)中也会跳过相应函数
+  - 关闭并行化模式质心检测功能不会关闭，可用于结合圆检测判断质心检测是否准确
+
+```c++
+#define PARALLELIZABLE 1 // 并行化模式
+```
+
 ### [rm_dgl_proc.h](include%2Frm_dgl_proc.h) 
 
 - 声明Processor类，和一些成员函数

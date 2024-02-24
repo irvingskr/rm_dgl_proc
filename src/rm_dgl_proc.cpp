@@ -9,7 +9,7 @@
 #define WIDTH 100
 #define HEIGHT 100
 #if TEST
-#define IMAGE_PATH "/home/irving/图片/images.jpeg" // 测试图片路径
+#define IMAGE_PATH "../config/2024-02-24 18-27-19屏幕截图.png" // 测试图片路径
 #endif
 
 namespace RmDglProc {
@@ -95,9 +95,12 @@ void Processor::showFilteredResult() {
               << std::endl;
   }
 
+  cv::circle(filteredImg, cv::Point(center_.x, center_.y),3, 255,2);
+  std::cout << "质心" <<  " x:" << center_.x << " y：" << center_.y << std::endl;
+
   // 显示图像
   cv::imshow("Filtered Image", filteredImg);
-  cv::waitKey(0);
+  cv::waitKey(1);
 }
 #endif
 
@@ -109,8 +112,12 @@ void Processor::process() {
 #endif
   contours_.clear();
   circles_.clear();
+#if PARALLELIZABLE
+#else
   contours_ = contoursDetector_->detectContours(image_filtered_);
   circles_ = contoursDetector_->detectCircles(contours_, c_threshold_);
+#endif
+  center_ = contoursDetector_->detectEdges(image_filtered_);
 }
 
 } // namespace RmDglProc

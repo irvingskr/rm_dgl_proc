@@ -54,6 +54,7 @@ private:
   int width_;
   int height_;
   int green_threshold_;
+  ContoursDetector::Point center_;
 
   /// 轮廓
   int c_threshold_;

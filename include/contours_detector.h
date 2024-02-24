@@ -5,6 +5,7 @@
 #ifndef RM_DGL_PROC_CONTOURS_DETECTOR_H
 #define RM_DGL_PROC_CONTOURS_DETECTOR_H
 #define M_PI 3.141592653589793238462643383279502884197169399375105820974944592307816406
+#define PARALLELIZABLE 1 // 并行化模式
 #include <rm_std.h>
 #endif // RM_DGL_PROC_CONTOURS_DETECTOR_H
 
@@ -27,13 +28,24 @@ public:
         edgeImage_(new unsigned char[width * height]()){};
   ~ContoursDetector() { delete[] edgeImage_; }
 
-  /// 检测边缘（输出二值图）
-  void detectEdges(const unsigned char *image) {
-    int gx, gy, sum;
+  /// 检测边缘,质心（输出二值图，返回点）
+  Point detectEdges(const unsigned char *image) {
+    int sum_temp{};
+    Point center{};
 
     // 遍历图像中的每个像素，只保存边缘
     for (int y = 1; y < height_ - 1; y++) {
       for (int x = 1; x < width_ - 1; x++) {
+        // 计算白色部分质心
+        if (image[y * width_ + x])
+        {
+            center.x+=x;
+            center.y+=y;
+            sum_temp++;
+        }
+
+#if PARALLELIZABLE
+#else
         // 应用Sobel算子，计算x方向和y方向的梯度
         gx = -image[(y - 1) * width_ + x - 1] +
              image[(y - 1) * width_ + x + 1] - 2 * image[y * width_ + x - 1] +
@@ -54,10 +66,19 @@ public:
         } else {
           edgeImage_[y * width_ + x] = 0;
         }
+#endif
       }
     }
+    // 计算白色部分质心
+    if (sum_temp)
+    {
+        center.x/=sum_temp;
+        center.y/=sum_temp;
+    }
+    return center;
   };
-
+#if PARALLELIZABLE
+#else
   /// 检测轮廓（输出vector）
   Vector<Vector<Point>>
   detectContours(const unsigned char *image) {
@@ -190,6 +211,7 @@ public:
     return Circle{Point{static_cast<int>(avgX), static_cast<int>(avgY)},
                   static_cast<int>(radius)};
   }
+#endif
 
 private:
   unsigned char *edgeImage_;
